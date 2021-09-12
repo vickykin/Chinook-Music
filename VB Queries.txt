@@ -1,0 +1,47 @@
+
+SELECT ar.Name, SUM(il.Quantity)*il.UnitPrice AS TotalSales
+FROM Artist ar
+JOIN Album al
+ON ar.ArtistId = al.ArtistId
+JOIN Track t
+ON al.AlbumId = t.AlbumId
+JOIN InvoiceLine il
+ON t.TrackId = il.TrackId
+GROUP BY ar.Name
+ORDER BY TotalSales DESC
+LIMIT 10;
+
+
+SELECT a.AlbumId, a.Title, SUM(il.Quantity)*il.UnitPrice AS TotalSales
+FROM Album a
+JOIN Track t
+ON a.AlbumId = t.AlbumId
+JOIN InvoiceLine il
+ON t.TrackId = il.TrackId
+GROUP BY a.AlbumId, a.Title
+ORDER BY TotalSales DESC
+LIMIT 5;
+
+
+SELECT c.Country, g.Name, COUNT(il.TrackId) AS Frequency
+FROM Genre g
+JOIN Track t
+ON g.GenreId = t.GenreId
+JOIN InvoiceLine il
+ON t.TrackId = il.TrackId
+JOIN Invoice i
+ON il.InvoiceId = i.InvoiceId
+JOIN Customer c
+ON i.CustomerId = c.CustomerId 
+WHERE c.Country = "France"
+GROUP BY c.Country, g.Name
+ORDER BY Frequency DESC;
+
+
+SELECT c.FirstName, c.LastName, SUM(i.Total) AS SalesTotal
+FROM Customer c
+JOIN Invoice i
+ON c.CustomerId = i.CustomerId
+WHERE c.Country = "Canada"
+GROUP BY c.FirstName, c.LastName
+ORDER BY SalesTotal DESC;
